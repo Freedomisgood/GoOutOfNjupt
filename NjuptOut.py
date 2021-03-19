@@ -71,7 +71,7 @@ def auto_apply(
         '$C{BJ}': '0',
         'BJ': '2665',
         '$C{lxdh}': '1',
-        'lxdh': f'{contact_person}',
+        'lxdh': f'{your_phonenum}',
         '$C{qjdmc}': '0',
         '$C{sqsj}': '0',
         'sqsj': f'{t.to_datetime_string()}',
@@ -86,7 +86,7 @@ def auto_apply(
         '$C{jjlxr}': '1',
         'jjlxr': contact_person,
         '$C{jjlxrdh}': '1',
-        'jjlxrdh': your_phonenum
+        'jjlxrdh': contact_person_phonenum
     }
     response = requests.post('http://bsdtlc.njupt.edu.cn/OperateProcessor', headers=headers, params=params,
                              cookies=cookies, data=data)
@@ -114,6 +114,8 @@ if __name__ == "__main__":
     contact_person_phonenum = params[6]
     your_phonenum = params[7] 
     apply_reason = params[8] 
+
+    print(params)
 
     n_day = pendulum.now()
     for i in range(int(days)):
