@@ -2,11 +2,6 @@ import requests
 import pendulum
 import re
 import sys
-# CONTACT_PERSON = "张慧华".encode("unicode_escape")
-# APPLY_REASON = "实习AUTO".encode("unicode_escape")
-
-CONTACT_PERSON = "张慧华"
-APPLY_REASON = "实习AUTO APPLY"
 
 # TODO: 进入 http://bsdtlc.njupt.edu.cn/StartWorkflow?Workflow=WF_XSCXSQ 查询cookies填入即可
 # cookies = {
@@ -31,7 +26,14 @@ headers = {
 
 
 
-def update(t, c):
+def auto_apply(
+            t, 
+            c: dict,
+            contact_person,
+            contact_person_phonenum,
+            your_phonenum,
+            apply_reason
+    ):
     params = (
         ('Workflow', 'WF_XSCXSQ'),
     )
@@ -50,8 +52,8 @@ def update(t, c):
         ('operate', 'WorkAction.4'),
         ('WorkActionID', '4'),
         ('Table', 'WF_XSCXSQ'),
-        ('Token', '{}'.format(token)),
-        ('WorkID', '{}'.format(work_id)),
+        ('Token', f'{token}'),
+        ('WorkID', f'{work_id}'),
         ('StepID', 'initialStep'),
         ('', ''),
         ('isSubmit', '1'),
@@ -69,7 +71,7 @@ def update(t, c):
         '$C{BJ}': '0',
         'BJ': '2665',
         '$C{lxdh}': '1',
-        'lxdh': '15061873738',
+        'lxdh': f'{contact_person}',
         '$C{qjdmc}': '0',
         '$C{sqsj}': '0',
         'sqsj': f'{t.to_datetime_string()}',
@@ -80,11 +82,11 @@ def update(t, c):
         '$C{mdd}': '2',
         'mdd': '1',
         '$C{cxsy}': '7',
-        'cxsy': APPLY_REASON,
+        'cxsy': apply_reason,
         '$C{jjlxr}': '1',
-        'jjlxr': CONTACT_PERSON,
+        'jjlxr': contact_person,
         '$C{jjlxrdh}': '1',
-        'jjlxrdh': '13975128213'
+        'jjlxrdh': your_phonenum
     }
     response = requests.post('http://bsdtlc.njupt.edu.cn/OperateProcessor', headers=headers, params=params,
                              cookies=cookies, data=data)
@@ -94,7 +96,7 @@ def update(t, c):
 import os
 if __name__ == "__main__":
     params = sys.argv
-    if len(params) != 5:
+    if len(params) != 8:
         os._exit(1)
         
     if not params[4].isdecimal():
@@ -106,7 +108,20 @@ if __name__ == "__main__":
         '`PortalToken': params[3]
     }
 
+    contact_person = params[4] 
+    contact_person_phonenum = params[5]
+    your_phonenum = params[6] 
+    apply_reason = params[7] 
+
     n_day = pendulum.now()
     for i in range(int(days)):
         n_day = n_day.add(days=1)
-        update(n_day, cookies)
+
+        auto_apply(
+            n_day, 
+            cookies,
+            contact_person,
+            contact_person_phonenum,
+            your_phonenum,
+            apply_reason
+        )

@@ -24,4 +24,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run script
       run: |
-        python3 NjuptOut.py "${{ secrets.UserID }}" "${{ secrets.JSESSIONID }}" "${{ secrets.PortalToken }}" "${{ secrets.days }}"
+        python3 NjuptOut.py "${{ secrets.UserID }}" "${{ secrets.JSESSIONID }}" "${{ secrets.PortalToken }}" "${{ secrets.days }}" "${{ secrets.contact_person }}" "${{ secrets.contact_person_phonenum }}" "${{ secrets.your_phonenum }}" "${{ secrets.apply_reason }}"
