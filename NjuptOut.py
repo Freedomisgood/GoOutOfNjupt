@@ -96,7 +96,9 @@ def auto_apply(
 import os
 if __name__ == "__main__":
     params = sys.argv
-    if len(params) != 8:
+    len_p = len(params)
+    if len_p != 9:
+        print(f"参数个数不正确， 请检验是否缺少Secrets必要参数, 当前数量为{len_p}")
         os._exit(1)
         
     if not params[4].isdecimal():
@@ -108,10 +110,10 @@ if __name__ == "__main__":
         '`PortalToken': params[3]
     }
 
-    contact_person = params[4] 
-    contact_person_phonenum = params[5]
-    your_phonenum = params[6] 
-    apply_reason = params[7] 
+    contact_person = params[5] 
+    contact_person_phonenum = params[6]
+    your_phonenum = params[7] 
+    apply_reason = params[8] 
 
     n_day = pendulum.now()
     for i in range(int(days)):

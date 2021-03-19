@@ -9,6 +9,8 @@
 - JSESSIONID
 - PortalToken
 
+需要先登陆智慧校园后，再进入网站 http://bsdtlc.njupt.edu.cn/StartWorkflow?Workflow=WF_XSCXSQ 然后打开浏览器的开发者工具, 查看cookies填入
+
 and 
 - days                      # 设置需要申请的天数, 这个是根据自己的需求填的
 - contact_person            # 联系人，如海绵宝宝
@@ -16,7 +18,9 @@ and
 - your_phonenum             # 你的手机号
 - apply_reason              # 原因
 
-上述4个值除了days是自己设置的以外，其他的需要先登陆智慧校园后，再进入网站 http://bsdtlc.njupt.edu.cn/StartWorkflow?Workflow=WF_XSCXSQ 然后打开浏览器的开发者工具, 查看cookies填入即可
+这些都是自己根据自身情况设置的
+
+Secrets大致说明：
 
 ![](./pics/20210319140834.jpg)
 
