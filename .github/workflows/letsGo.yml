@@ -1,0 +1,22 @@
+name: LetsGoOutOfNjupt
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up Python #安装python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install requirements #安装轮子
+      run: |
+        pip install -r requirements.txt
+    - name: Run script
+      run: |
+        python3 NjuptOut.py "${{ secrets.UserID }}" "${{ secrets.JSESSIONID }}" "${{ secrets.PortalToken }}"
