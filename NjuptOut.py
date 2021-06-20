@@ -1,7 +1,10 @@
+
+
 import requests
 import pendulum
 import re
 import sys
+import os
 
 # TODO: 进入 http://bsdtlc.njupt.edu.cn/StartWorkflow?Workflow=WF_XSCXSQ 查询cookies填入即可
 # cookies = {
@@ -9,7 +12,6 @@ import sys
 #     'JSESSIONID': '#',
 #     'PortalToken': '#..',
 # }
-
 
 headers = {
     'Connection': 'keep-alive',
@@ -27,7 +29,7 @@ headers = {
 
 
 def auto_apply(
-            t, 
+            t: int, 
             c: dict,
             contact_person,
             contact_person_phonenum,
@@ -43,8 +45,6 @@ def auto_apply(
             cookies=c
         )
     content = response.text
-    # s = 'LBUI.store = new LBUI.data.EmptyStore({url:"/WorkProcessor?
-    # Table=WF_XSCXSQ&Token=1714df5ed754ff1064ea0914534816f2&WorkID=166710&StepID=initialStep"});'
     res = re.search("Token=(.*?)&WorkID=(.*?)&", content)
     token, work_id = res.group(1), res.group(2)
 
@@ -89,27 +89,30 @@ def auto_apply(
         'jjlxrdh': contact_person_phonenum
     }
     response = requests.post('http://bsdtlc.njupt.edu.cn/OperateProcessor', headers=headers, params=params,
-                             cookies=cookies, data=data)
+                             cookies=c, data=data)
     print(t.to_date_string() + "申请结果为: ", response.status_code)
+    print(t.to_date_string() + "申请结果为: ", response.text)
 
 
-import os
+
 if __name__ == "__main__":
     params = sys.argv
     len_p = len(params)
-    if len_p != 9:
-        print(f"参数个数不正确， 请检验是否缺少Secrets必要参数, 当前数量为{len_p}")
+    if len_p != 10:
+        print(f"参数个数不正确， 请检验是否缺少Secrets必要参数, 当前数量为{len_p-1}")
         os._exit(1)
         
     if not params[4].isdecimal():
         os._exit(1)
-    days = params[4]
     cookies = {
-        '`UserID': params[1],
+        'UserID': params[1],
         'JSESSIONID': params[2],
-        '`PortalToken': params[3]
+        'PortalToken': params[3],
+        "route": params[9],
+        "TodoTasks.Group": "Workflow"
     }
 
+    days = params[4]
     contact_person = params[5] 
     contact_person_phonenum = params[6]
     your_phonenum = params[7] 
